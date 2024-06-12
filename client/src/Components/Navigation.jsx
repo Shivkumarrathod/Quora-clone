@@ -6,9 +6,10 @@ import { MdOutlineEditNote,MdPeopleAlt,MdNotificationsNone } from "react-icons/m
 import { TbWorld } from "react-icons/tb";
 import {  FaUser } from "react-icons/fa";
 import Home from "../Pages/Home/Home";
-
+import AddQuetion from "./AddQuetion";
 
 const Navigation = () => {
+  
   const [userBar,setUserBar] = useState(false)
 
   return (<>
@@ -46,7 +47,7 @@ const Navigation = () => {
             </div>
             <div className={`p-2 ml-4 bg-black w-[320px] h-[35px]  flex justify-around items-center `}> 
               <IoIosSearch size={20} className=""/>
-              <input type="text" placeholder="Serch Quora" className="w-[300px] h-[28px] bg-black text-white pl-1 " />
+              <input type="text" placeholder="Serch Quora" className="w-[300px] h-[28px] bg-black text-white pl-1 focus:outline-none" />
             </div>
             <div className="ml-2 px-2 border rounded-full bg-black hover:bg-[#262626] ">
               <button>Try Quora+</button>
@@ -62,12 +63,13 @@ const Navigation = () => {
               </Link>
             </div>
             <div className="ml-2 ">
-              <button className="bg-red-600 w-[8rem] p-1 rounded-full hover:bg-red-800">Add quetion</button>
+              <AddQuetion/>
             </div>
           </div>
         <div>
            <Home userBar={userBar}/>
         </div>
+       
       </div>
       
   </>

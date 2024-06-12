@@ -1,15 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useFirebase } from '../../Firebase/firebase'
-
+import {useCreateQuetionMutation} from '../../app/services/allApi'
+import {useNavigate} from 'react-router-dom'
 
 const Home = ({userBar}) => {
   const firebase = useFirebase()
+  const {uid}= firebase.user
+
 
   const handleUserLogOut = ()=>{
     firebase.signOut()
   }
+
+  
+
   return (
     <>
+       
       <div className="bg-black text-white flex justify-center gap-5 ml-[3rem] mt-2">
         <div className='leftBar w-[153px] h-[600px] bg-[#262626]'>
         
@@ -26,9 +33,6 @@ const Home = ({userBar}) => {
         )}
         </div>
         </div>
-
-       
-
     </>
     
 

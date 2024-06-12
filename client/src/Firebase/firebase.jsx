@@ -28,14 +28,14 @@ const  googleProvider = new GoogleAuthProvider()
 const githubProvider = new GithubAuthProvider()
 
 export const FirebaseProvider =(props)=>{
-    const [user ,setUSer] = useState(false)
+    const [user ,setUSer] = useState('')
 
     useEffect(()=>{
         onAuthStateChanged(firebaseAuth ,(user)=>{
             if(user){
-                setUSer(true)
+                setUSer(user)
             }else{
-                setUSer(false)
+                setUSer('')
             }
         })
     },[user,onAuthStateChanged])
@@ -67,6 +67,7 @@ export const FirebaseProvider =(props)=>{
         signOut,
         signInWithGoogle,
         signInWithGithub,
+        user
     }}>
         {props.children}
     </FirebaseContext.Provider>

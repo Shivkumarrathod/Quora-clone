@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import { BrowserRouter, createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 import { Route,RouterProvider, createRoutesFromElements } from 'react-router'
-import Login from './Pages/Login.jsx'
 import { FirebaseProvider } from './Firebase/firebase'
-import { useFirebase } from './Firebase/firebase'
-import Navigation from './Components/Navigation.jsx'
 
+import { Store } from './app/Store.js'
+import { Provider } from 'react-redux'
 
 const router = createBrowserRouter(
    createRoutesFromElements(
@@ -18,14 +17,14 @@ const router = createBrowserRouter(
 )
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  
-  <React.StrictMode>
-    <FirebaseProvider>
-      <RouterProvider router={router}/>
-    </FirebaseProvider>
-  </React.StrictMode>
+   <React.StrictMode>
+     <Provider store={Store}>
+       <FirebaseProvider>
+          <RouterProvider router={router}/>
+       </FirebaseProvider>
+    </Provider>
+   </React.StrictMode>
 )
-
 
 // ReactDOM.createRoot(document.getElementById('root')).render(
   
