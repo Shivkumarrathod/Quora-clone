@@ -37,7 +37,7 @@ const AddQuetion = () => {
         >Add quetion</button>
 
       {addQuetion&&(
-          <div className=' h-[100vh] absolute  z-50'>
+          <div className=' h-[100vh] absolute z-50'>
              <div className='w-[45rem] h-[23rem] -ml-[45rem]  mt-10 rounded-md bg-[#161616] text-white '> 
               <div className='flex justify-center items-center w-full mt-[2rem] h-[3rem] '>
                 <div onClick={()=>{setAddQuetion(true) ,setcreatePost(false)}} className={`font-bold  w-[50%] text-center cursor-pointer mt-4 ${addQuetions?" border-b-4 border-b border-red-600":"border-b border-gray-500 "} hover:bg-[#262626] p-1`}>Add Quetion</div>

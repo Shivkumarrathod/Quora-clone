@@ -4,17 +4,16 @@ import { IoMdHome,IoIosSearch } from "react-icons/io";
 import { RiUserFollowLine } from "react-icons/ri";
 import { MdOutlineEditNote,MdPeopleAlt,MdNotificationsNone } from "react-icons/md";
 import { TbWorld } from "react-icons/tb";
-import {  FaUser } from "react-icons/fa";
 import Home from "../Pages/Home/Home";
 import AddQuetion from "./AddQuetion";
+import UserInfo from "../Pages/user/UserInfo";
 
 const Navigation = () => {
   
-  const [userBar,setUserBar] = useState(false)
 
   return (<>
       <div className="bg-black">
-      <div className='bg-[#262626] rounded-sm h-[55px] flex justify-center items-center  text-white'>
+      <div className='bg-[#262626]  h-[55px] flex justify-center items-center  text-white border-b border-gray-500 fixed -mt-[0.5rem] w-full'>
             <div>
               <Link to='/'>
                 <h1 className="text-4xl -mt-2 mr-4 font-bold text-red-600 hover:text-white">Quora</h1>
@@ -52,22 +51,25 @@ const Navigation = () => {
             <div className="ml-2 px-2 border rounded-full bg-black hover:bg-[#262626] ">
               <button>Try Quora+</button>
             </div>
-            <div className={`p-2 ml-4 hover:text-red-500 hover:bg-[#333333]`}> 
+
+            <div className={`p-2 ml-2`}> 
               <Link to='/'>
-                <FaUser size={25} onClick={()=>setUserBar(!userBar)} />
+                <UserInfo/>
               </Link>
             </div>
-            <div className={`p-2 ml-4 hover:text-red-500 hover:bg-[#333333]`}> 
+
+            <div className={`p-2 ml-1 hover:text-red-500 hover:bg-[#333333]`}> 
               <Link to='/'>
                 <TbWorld size={25} />
               </Link>
             </div>
+
             <div className="ml-2 ">
               <AddQuetion/>
             </div>
           </div>
         <div>
-           <Home userBar={userBar}/>
+           <Home/>
         </div>
        
       </div>
