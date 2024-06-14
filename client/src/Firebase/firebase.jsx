@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app'
+import {getDoc, doc, getFirestore, setDoc} from 'firebase/firestore'
 import { getAuth ,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -8,6 +9,8 @@ import { getAuth ,
     GithubAuthProvider,
 } from 'firebase/auth';
 import { createContext ,useContext, useEffect, useState } from 'react'
+import {getStorage,ref,uploadBytes,getDownloadURL} from 'firebase/storage'
+
 
 const FirebaseContext = createContext(null)
 export const useFirebase = ()=> useContext(FirebaseContext)
@@ -18,17 +21,20 @@ const firebaseConfig = {
     projectId: "quora-clone-ecfd0",
     storageBucket: "quora-clone-ecfd0.appspot.com",
     messagingSenderId: "117811209596",
-    appId: "1:117811209596:web:930dda5b1fa87777f9f0f9"
+    appId: "1:117811209596:web:930dda5b1fa87777f9f0f9",
 };
 
 const firebaseApp = initializeApp(firebaseConfig) 
-const firebaseAuth = getAuth(firebaseApp)
+export const firebaseAuth = getAuth(firebaseApp)
 const user = firebaseAuth.currentUser;
 const  googleProvider = new GoogleAuthProvider()
 const githubProvider = new GithubAuthProvider()
+const firebaseStorage = getStorage(firebaseApp)
+const firebaseFirestore = getFirestore(firebaseApp)
 
 export const FirebaseProvider =(props)=>{
     const [user ,setUSer] = useState('')
+    const [uploadImage,setUploadImage]= useState('')
 
     useEffect(()=>{
         onAuthStateChanged(firebaseAuth ,(user)=>{
@@ -42,8 +48,20 @@ export const FirebaseProvider =(props)=>{
 
     let isLoggedIn = user ? true:false;
 
-    const createUserWithEmailAndPasswordHandler = (email ,password)=>{
-      return  createUserWithEmailAndPassword(firebaseAuth,email,password)
+    const createUserWithEmailAndPasswordHandler = async(email ,password)=>{
+      try {
+        const userCredetial =await createUserWithEmailAndPassword(firebaseAuth,email,password)
+        const user = userCredetial.user
+        await setDoc(doc(firebaseFirestore,'users',user.uid),{
+            uid:user.uid,
+            email:user.email,
+            displayName:user.displayName?user.displayName:'',
+            photoURL:user.photoURL?user.photoURL:"",
+            createdAt:new Date()
+        })
+      } catch (error) {
+         console.log(error);
+      }
     }
     const signInUser =(email,password)=>{
         return signInWithEmailAndPassword(firebaseAuth ,email ,password)
@@ -54,20 +72,84 @@ export const FirebaseProvider =(props)=>{
             console.log("user log Out");
          }).catch((error)=>console.log(error))
     }
-    const signInWithGoogle =()=>{
-       return signInWithPopup(firebaseAuth,googleProvider)
+    const signInWithGoogle =async()=>{
+       try {
+        const userCredential=await signInWithPopup(firebaseAuth,googleProvider)
+        const user = userCredential.user
+
+        const userDocRef = doc(firebaseFirestore,'users',user.uid)
+        const userDocSnap = await getDoc(userDocRef)
+
+        if (!userDocSnap.exists()) {
+            await setDoc(doc(firebaseFirestore,'users',user.uid),{
+                uid:user.uid,
+                email:user.email,
+                displayName:user.displayName?user.displayName:'',
+                photoURL:user.photoURL?user.photoURL:"",
+                createdAt:new Date()
+            }) 
+        }
+       } catch (error) {
+        console.log(error);
+       } 
     }
 
-    const signInWithGithub =()=>{
-        return signInWithPopup(firebaseAuth,githubProvider)
+    const signInWithGithub =async()=>{
+        try {
+            const userCredential=await signInWithPopup(firebaseAuth,githubProvider)
+            const user = userCredential.user
+    
+            const userDocRef = doc(firebaseFirestore,'users',user.uid)
+            const userDocSnap = await getDoc(userDocRef)
+    
+            if (!userDocSnap.exists()) {
+                await setDoc(doc(firebaseFirestore,'users',user.uid),{
+                    uid:user.uid,
+                    email:user.email,
+                    displayName:user.displayName?user.displayName:'',
+                    photoURL:user.photoURL?user.photoURL:"",
+                    createdAt:new Date()
+                }) 
+            }
+           } catch (error) {
+            console.log(error);
+           } 
     }
-    return <FirebaseContext.Provider value={{createUserWithEmailAndPasswordHandler,
+
+    const uploadingImagePost=async(uid,image)=>{
+       const imageRef= ref(firebaseStorage,`uploads/image/${uid}-${image.name}`)
+       const uploadResult= await uploadBytes(imageRef,image)
+       return (uploadResult.ref.fullPath)
+    }
+    const GetUserById = async(uid)=>{
+        try {
+           const userDoc= await getDoc(doc(firebaseFirestore,'users',uid)) 
+           return userDoc
+          } catch (error) {
+            console.log(error);
+          }
+    }
+    const getImage = async(imgUrl)=>{
+        try {
+            const imageRef = ref(firebaseStorage,imgUrl)
+            const url = await getDownloadURL(imageRef)
+            return url
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    return <FirebaseContext.Provider value={{
+        createUserWithEmailAndPasswordHandler,
         signInUser,
         isLoggedIn,
         signOut,
         signInWithGoogle,
         signInWithGithub,
-        user
+        user,
+        uploadingImagePost,
+        uploadImage,
+        GetUserById,
+        getImage
     }}>
         {props.children}
     </FirebaseContext.Provider>

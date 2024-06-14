@@ -25,12 +25,10 @@ const Login = () => {
     }) 
   }
   const createUserHandler =()=>{
-    firebase.createUserWithEmailAndPasswordHandler(email,password)
-    .then()
-     .catch((error)=>{
-      console.log(error.message);
-       setErrorMessage(error?.message)
-    }) 
+    const error = firebase.createUserWithEmailAndPasswordHandler(email,password)
+    if (error) {
+      setErrorMessage(error.message)
+    }
   }
   const loginWithGoogleHandler = ()=>{
     firebase.signInWithGoogle()
@@ -65,7 +63,7 @@ const Login = () => {
 
         <div className='ml-5 mt-[4rem] z-40 w-[90%]'>
            <div className='mb-5'>
-           <label htmlFor="Email" className='font-bold'>Email</label>
+           <label  className='font-bold'>Email</label>
             <br />
             <input type="email"
             value={email}
@@ -75,7 +73,7 @@ const Login = () => {
            </div>
 
            <div className='mb-5'>
-           <label htmlFor="Password" className='font-bold'>Password</label>
+           <label  className='font-bold'>Password</label>
             <br />
             <input type="password"
             value={password}
@@ -124,7 +122,7 @@ const Login = () => {
         <div className='w-[350px] h-[255px] ml-2'>
            <h1 className=' border-b font-bold p-2'>login</h1>
            <div className='ml-2 mt-2 '>
-            <label htmlFor="Email" className='font-bold'>Email</label>
+            <label className='font-bold'>Email</label>
             <br />
             <input type="email"
             value={email}
@@ -133,7 +131,7 @@ const Login = () => {
             placeholder='You Email'/>
            </div>
            <div className='ml-2 mt-2 '>
-            <label htmlFor="password" className='font-bold'>Password</label>
+            <label  className='font-bold'>Password</label>
             <br />
             <input type="text"
             value={password}

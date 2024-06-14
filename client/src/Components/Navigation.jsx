@@ -13,7 +13,7 @@ const Navigation = () => {
 
   return (<>
       <div className="bg-black">
-      <div className='bg-[#262626]  h-[55px] flex justify-center items-center  text-white border-b border-gray-500 fixed -mt-[0.5rem] w-full'>
+      <div className='bg-[#262626]  h-[55px] flex justify-center items-center  text-white border-b border-gray-500 fixed -mt-[0.0rem] w-full'>
             <div>
               <Link to='/'>
                 <h1 className="text-4xl -mt-2 mr-4 font-bold text-red-600 hover:text-white">Quora</h1>

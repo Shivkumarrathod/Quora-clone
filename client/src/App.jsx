@@ -23,9 +23,8 @@ function App() {
 
   return <>
        <ToastContainer/>
-       
-       <main >
        {user?<Navigation/>:<Login/>}
+       <main >
       <Outlet/>
      </main>
   </>
